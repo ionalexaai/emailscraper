@@ -41,7 +41,7 @@ class DomainExplorer(Thread):
         found_emails = self.get_emails()
 
         self.results.put((self.domain, found_emails))
-        logger.info(self.domain + " " + str(found_emails))
+        #logger.info(self.domain + " " + str(found_emails))
             
 
 
