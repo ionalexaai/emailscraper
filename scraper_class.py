@@ -29,7 +29,7 @@ class DomainExplorer(Thread):
 
     def main(self):
 
-        self.url = self.domain if self.domain.startswith("http") else "https://"+self.domain
+        self.url = self.domain if self.domain.startswith("http") else "http://"+self.domain
 
         self.src = self.get_page_source()
         self.links = self.get_page_links()
@@ -46,7 +46,7 @@ class DomainExplorer(Thread):
 
     def get_page_source(self):
 
-        response = self.r.get(self.url, timeout=self.timeout)
+        response = self.r.get(self.url, timeout=self.timeout, verify=False)
 
         return response.text
 
@@ -69,7 +69,7 @@ class DomainExplorer(Thread):
 
         for link in self.links:
             try:
-                response = self.r.get(link, timeout = self.timeout)
+                response = self.r.get(link, timeout = self.timeout, verify=False)
                 #print(link)
                 emails2 = re.findall(self.pattern, response.text)
                 for email in emails2:
