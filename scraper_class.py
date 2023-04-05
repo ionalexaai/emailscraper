@@ -13,6 +13,7 @@ from loggers import logger
 from config import BaseConfig
 
 class DomainExplorer(Thread):
+    """A threading class that scrapes emails from domains"""
     def __init__(self, workerqueue, resultsqueue):
         
         Thread.__init__(self)
