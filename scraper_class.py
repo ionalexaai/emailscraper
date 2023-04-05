@@ -1,3 +1,10 @@
+"""
+Main scraper class for a domain.
+Visits each domain ad gets all the internal links on the homepage.
+Then it checks each link for emails.
+All emails found are added to a list and returned.
+"""
+
 from bs4 import BeautifulSoup
 import requests
 from threading import Thread
