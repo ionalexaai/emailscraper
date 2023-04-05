@@ -22,7 +22,6 @@ class DomainExplorer(Thread):
         self.timeout = BaseConfig.REQUEST_TIMEOUT
         self.r.headers.update(BaseConfig.HEADERS)
         self.pattern = BaseConfig.EMAIL_PATTERN
-        logger.info("Thread Started")
 
 
     def run(self):
