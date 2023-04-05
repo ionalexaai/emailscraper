@@ -2,6 +2,7 @@ import os
 import datetime
 
 class BaseConfig:
+    """Main configuration class"""
     now = datetime.datetime.now()
     date_string = now.strftime("%Y-%m-%d")
     time_string = now.strftime("%H-%M-%S")
