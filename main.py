@@ -1,4 +1,5 @@
 """Simple Email Scraper against a list of domains"""
+
 import queue
 import warnings
 
@@ -27,6 +28,8 @@ if __name__ == "__main__":
         t = DomainExplorer(domainqueue, emailsqueue)
         t.daemon = True
         t.start()
+
+    logger.info(f"Started {BaseConfig.THREADS_NUMBER} Threads")
 
     # Start our collector thread
     results_thread = EmailOutput(emailsqueue)
