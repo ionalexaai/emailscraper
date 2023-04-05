@@ -16,8 +16,9 @@ if __name__ == "__main__":
     domainqueue = queue.Queue()
     emailsqueue = queue.Queue()
 
-    # TODO: Add domains to queue inside the context manager and use queue maxsize for memory efficiency
-    with open(BaseConfig.HOSTS_FILE,"r") as domains_file:
+    # pylint: disable=W0511
+    # TODO: Add domains to queue inside the context manager and use queue maxsize for efficiency
+    with open(BaseConfig.HOSTS_FILE, "r", encoding="utf-8") as domains_file:
         domains = domains_file.read().splitlines()
 
     for domain in domains:
