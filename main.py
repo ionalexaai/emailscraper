@@ -1,35 +1,40 @@
+"""Simple Email Scraper against a list of domains"""
 import queue
 import warnings
 
 from config import BaseConfig
 from loggers import logger
 from scraper_class import DomainExplorer
+from results_class import EmailOutput
 
+# Ignore warnings because of verify=False on SSL certificates
 warnings.filterwarnings("ignore")
 
 if __name__ == "__main__":
+    # Define two queues to work with
     domainqueue = queue.Queue()
     emailsqueue = queue.Queue()
-    workers = []
 
+    # TODO: Add domains to queue inside the context manager and use queue maxsize for memory efficiency
     with open(BaseConfig.HOSTS_FILE,"r") as domains_file:
         domains = domains_file.read().splitlines()
 
     for domain in domains:
         domainqueue.put(domain)
 
+    # Start our threads
     for _i in range(BaseConfig.THREADS_NUMBER):
         t = DomainExplorer(domainqueue, emailsqueue)
         t.daemon = True
         t.start()
-        workers.append(t)
 
-    while True:
-        domain, emaillist = emailsqueue.get()
-        email = " ".join(emaillist)
-        with open(BaseConfig.OUTPUT_FILE,"a") as rf:
-            rf.write(f"{domain} {email}\n")
+    # Start our collector thread
+    results_thread = EmailOutput(emailsqueue)
+    results_thread.daemon = True
+    results_thread.start()
 
-
-    for worker in workers:
-        worker.join()
+    # Gracefully join our queues so that our threads can exit
+    domainqueue.join()
+    logger.info("Domains finished processing")
+    emailsqueue.join()
+    logger.info("Collector finished processing")
