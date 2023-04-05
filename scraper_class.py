@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
 from threading import Thread
-import queue
 import re
 from loggers import logger
 from config import BaseConfig
@@ -24,9 +23,10 @@ class DomainExplorer(Thread):
             try:
                 self.domain = self.work.get()
                 self.main()
-                self.work.task_done()
             except Exception as e:
                 logger.error(str(e))
+            finally:
+                self.work.task_done()
 
     def main(self):
 
@@ -41,14 +41,11 @@ class DomainExplorer(Thread):
         found_emails = self.get_emails()
 
         self.results.put((self.domain, found_emails))
-        #logger.info(self.domain + " " + str(found_emails))
-            
 
 
     def get_page_source(self):
 
         response = self.r.get(self.url, timeout=self.timeout, verify=False)
-
         return response.text
 
     def get_page_links(self):
@@ -70,7 +67,7 @@ class DomainExplorer(Thread):
 
         for link in self.links:
             try:
-                response = self.r.get(link, timeout = self.timeout, verify=False)
+                response = self.r.get(link, timeout=self.timeout, verify=False)
                 #print(link)
                 emails2 = re.findall(self.pattern, response.text)
                 for email in emails2:
