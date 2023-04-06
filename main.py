@@ -12,7 +12,7 @@ from results_class import EmailOutput
 warnings.filterwarnings("ignore")
 
 if __name__ == "__main__":
-    # Define two queues to work with
+    # Define two queues to work with. Set maxsize for the main queue
     domainqueue = queue.Queue(maxsize=5000)
     emailsqueue = queue.Queue()
 
