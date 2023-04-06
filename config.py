@@ -1,3 +1,5 @@
+"""Configuration module for our Email Scraper"""
+# pylint: disable=C0301,R0903
 import os
 import datetime
 
@@ -25,4 +27,4 @@ class BaseConfig:
 if not os.path.exists(BaseConfig.LOG_FOLDER):
     os.makedirs(BaseConfig.LOG_FOLDER)
 if not os.path.exists(BaseConfig.OUTPUT_FOLDER):
-    os.makedirs(BaseConfig.OUTPUT_FOLDER)    
+    os.makedirs(BaseConfig.OUTPUT_FOLDER)

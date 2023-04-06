@@ -4,18 +4,19 @@ Visits each domain ad gets all the internal links on the homepage.
 Then it checks each link for emails.
 All emails found are added to a list and returned.
 """
+#pylint: disable=C0103,R0902,W0718,W0201
 
-from bs4 import BeautifulSoup
-import requests
-from threading import Thread
 import re
+from threading import Thread
+import requests
+from bs4 import BeautifulSoup
 from loggers import logger
 from config import BaseConfig
 
 class DomainExplorer(Thread):
     """A threading class that scrapes emails from domains"""
     def __init__(self, workerqueue, resultsqueue):
-        
+
         Thread.__init__(self)
         self.work = workerqueue
         self.results = resultsqueue
@@ -36,6 +37,7 @@ class DomainExplorer(Thread):
                 self.work.task_done()
 
     def main(self):
+        """Main scraper function"""
 
         self.url = self.domain if self.domain.startswith("http") else "http://"+self.domain
 
@@ -51,11 +53,13 @@ class DomainExplorer(Thread):
 
 
     def get_page_source(self):
+        """A method to get the source code from a link"""
 
         response = self.r.get(self.url, timeout=self.timeout, verify=False)
         return response.text
 
     def get_page_links(self):
+        """A method to scrape all the URLs from a page"""
 
         links = []
         self.soup = BeautifulSoup(self.src, 'html.parser')
@@ -70,6 +74,7 @@ class DomainExplorer(Thread):
         return list(set(links))
 
     def get_emails(self):
+        """A method to scrape emails from a page"""
         emails = []
 
         for link in self.links:
