@@ -13,14 +13,8 @@ warnings.filterwarnings("ignore")
 
 if __name__ == "__main__":
     # Define two queues to work with
-    domainqueue = queue.Queue()
+    domainqueue = queue.Queue(maxsize=5000)
     emailsqueue = queue.Queue()
-
-    # pylint: disable=W0511
-    # TODO: Add domains to queue inside the context manager and use queue maxsize for efficiency
-    with open(BaseConfig.HOSTS_FILE, "r", encoding="utf-8") as domains_file:
-        for domain in domains_file.read():
-            domainqueue.put(domain.strip())
 
     # Start our threads
     for _i in range(BaseConfig.THREADS_NUMBER):
@@ -34,6 +28,11 @@ if __name__ == "__main__":
     results_thread = EmailOutput(emailsqueue)
     results_thread.daemon = True
     results_thread.start()
+
+    # Add domains to the queue from a context manager to save memory
+    with open(BaseConfig.HOSTS_FILE, "r", encoding="utf-8") as domains_file:
+        for domain in domains_file.readlines():
+            domainqueue.put(domain.strip())
 
     # Gracefully join our queues so that our threads can exit
     domainqueue.join()
