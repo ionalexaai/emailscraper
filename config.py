@@ -10,7 +10,7 @@ class BaseConfig:
     time_string = now.strftime("%H-%M-%S")
 
     HOSTS_FILE = "domains.txt"
-    THREADS_NUMBER = 30
+    THREADS_NUMBER = 20
 
     OUTPUT_FOLDER = "results"
     OUTPUT_FILE = f"{OUTPUT_FOLDER}\\Results_{date_string}_{time_string}.csv"
