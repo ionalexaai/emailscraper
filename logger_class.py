@@ -3,6 +3,7 @@
 import logging
 import inspect
 from logging.handlers import RotatingFileHandler
+from pymongo import MongoClient
 
 
 class StreamAndMongoLogger:
