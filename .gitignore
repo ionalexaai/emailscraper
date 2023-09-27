@@ -2,3 +2,4 @@ __pycache__
 logs/*.log
 *.txt
 *.csv
+tests
