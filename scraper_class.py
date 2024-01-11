@@ -69,7 +69,7 @@ class DomainExplorer(Thread):
                 url = link.get('href')
                 if self.domain in str(url) and url.startswith("http"):
                     links.append(link.get('href'))
-                    #print(link.get('href'))
+                    # logger.debug(f'Grabbed inner link {link.get("href")}')
 
         return list(set(links))
 
@@ -80,7 +80,6 @@ class DomainExplorer(Thread):
         for link in self.links:
             try:
                 response = self.r.get(link, timeout=self.timeout, verify=False)
-                #print(link)
                 emails2 = re.findall(self.pattern, response.text)
                 for email in emails2:
                     if email not in emails and "/" not in email and "\\" not in email :
